@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plataforma de Estructuras de Datos - Colas (FIFO)</title>
+    <!-- Tailwind CSS CDN para la interfaz gráfica -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome para iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-slate-900 text-slate-100 font-sans min-h-screen flex flex-col">
+
+    <!-- Encabezado Principal de la Plataforma -->
+    <header class="bg-slate-800 border-b border-slate-700 py-4 px-6 shadow-md">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <i class="fa-solid fa-layer-group text-blue-500 text-3xl"></i>
+                <div>
+                    <h1 class="text-xl font-bold tracking-wide text-white">Plataforma de Estructuras de Datos</h1>
+                    <p class="text-xs text-slate-400">Demostración Interactiva de la Clase Cola (FIFO)</p>
+                </div>
+            </div>
+            <div>
+                <button onclick="irAlMenu()" class="bg-slate-700 hover:bg-slate-600 text-slate-200 text-xs py-2 px-4 rounded border border-slate-600 transition flex items-center">
+                    <i class="fa-solid fa-house mr-2"></i> Menú Principal
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- ÁREA DE VISTAS DE LA APLICACIÓN -->
+    <main class="flex-1 max-w-7xl w-full mx-auto p-6">
+
+        <!-- ================================================================= -->
+        <!-- VISTA 0: MENÚ PRINCIPAL -->
+        <!-- ================================================================= -->
+        <section id="vista-menu" class="space-y-8 py-8">
+            <div class="text-center max-w-2xl mx-auto">
+                <h2 class="text-3xl font-extrabold text-white mb-2">Seleccione un Ejercicio</h2>
+                <p class="text-sm text-slate-400">Elija la aplicación basada en la estructura de datos Cola que desea ejecutar e interactuar.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                
+                <!-- Tarjeta Ejercicio 1 -->
+                <div class="bg-slate-800 border border-slate-700 hover:border-blue-500 rounded-xl p-6 shadow-xl transition-all transform hover:-translate-y-1 flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 bg-blue-900/50 border border-blue-500 text-blue-400 rounded-lg flex items-center justify-center text-2xl mb-4">
+                            <i class="fa-solid fa-calculator"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-2">Ejercicio 1: Suma de Colas</h3>
+                        <p class="text-xs text-slate-400 leading-relaxed mb-6">
+                            Permite ingresar elementos en forma secuencial para dos colas independientes (Cola A y Cola B) y realiza el procesamiento desencolado uno a uno para obtener y visualizar una tercera Cola Resultado con sus valores sumados.
+                        </p>
+                    </div>
+                    <button onclick="abrirEjercicio(1)" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-semibold py-2.5 px-4 rounded-lg text-sm transition flex items-center justify-center">
+                        Iniciar Ejercicio 1 <i class="fa-solid fa-arrow-right ml-2"></i>
+                    </button>
+                </div>
+
+                <!-- Tarjeta Ejercicio 2 -->
+                <div class="bg-slate-800 border border-slate-700 hover:border-emerald-500 rounded-xl p-6 shadow-xl transition-all transform hover:-translate-y-1 flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 bg-emerald-900/50 border border-emerald-500 text-emerald-400 rounded-lg flex items-center justify-center text-2xl mb-4">
+                            <i class="fa-solid fa-users-line"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-2">Ejercicio 2: Gestión de Turnos de Seguros</h3>
+                        <p class="text-xs text-slate-400 leading-relaxed mb-6">
+                            Sistema interactivo para compañía de seguros con pantalla de atención al público, panel de control de consola comandos (C / A) y visualización multi-cola para la asignación de turnos por servicios.
+                        </p>
+                    </div>
+                    <button onclick="abrirEjercicio(2)" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-semibold py-2.5 px-4 rounded-lg text-sm transition flex items-center justify-center">
+                        Iniciar Ejercicio 2 <i class="fa-solid fa-arrow-right ml-2"></i>
+                    </button>
+                </div>
+
+            </div>
+        </section>
+
+
+        <!-- ================================================================= -->
+        <!-- VISTA 1: EJERCICIO 1 - SUMA DE COLAS -->
+        <!-- ================================================================= -->
+        <section id="vista-ejercicio1" class="hidden space-y-6">
+            
+            <div class="flex justify-between items-center border-b border-slate-800 pb-4">
+                <div>
+                    <h2 class="text-2xl font-bold text-white">Ejercicio 1: Suma Elemento a Elemento de Colas</h2>
+                    <p class="text-xs text-slate-400">Llenado secuencial por columna A, columna B y cálculo de resultado</p>
+                </div>
+                <button onclick="irAlMenu()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs py-2 px-3 rounded border border-slate-700">
+                    <i class="fa-solid fa-arrow-left mr-1"></i> Regresar al Menú Principal
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Panel de Formulario / Entrada de Datos -->
+                <div class="bg-slate-800 border border-slate-700 rounded-lg p-5 shadow-lg space-y-4">
+                    <h3 class="text-sm font-semibold text-blue-400 uppercase tracking-wider flex items-center">
+                        <i class="fa-solid fa-input-numeric mr-2"></i> Captura de Datos
+                    </h3>
+
+                    <!-- Paso 1: Cantidad de Filas -->
+                    <div id="ej1-paso1" class="space-y-2">
+                        <label class="block text-xs text-slate-300 font-medium">1. Defina la cantidad de filas (elementos):</label>
+                        <div class="flex space-x-2">
+                            <input type="number" id="ej1-numFilas" min="1" max="10" placeholder="Ej. 5" class="bg-slate-900 border border-slate-700 rounded px-3 py-1.5 text-sm w-full font-mono text-white focus:outline-none focus:border-blue-500">
+                            <button onclick="ej1_fijarFilas()" class="bg-blue-600 hover:bg-blue-500 text-white text-xs px-4 py-1.5 rounded font-medium">Fijar</button>
+                        </div>
+                    </div>
+
+                    <!-- Paso 2: Llenado de Cola A -->
+                    <div id="ej1-paso2" class="hidden space-y-2 border-t border-slate-700 pt-3">
+                        <label class="block text-xs text-slate-300 font-medium">2. Ingrese elementos para <span class="text-blue-400 font-bold">Cola A</span>:</label>
+                        <div id="ej1-inputsA" class="space-y-1.5 max-h-48 overflow-y-auto pr-1"></div>
+                        <button onclick="ej1_guardarColaA()" class="w-full bg-blue-600 hover:bg-blue-500 text-white text-xs py-2 rounded font-medium mt-2">Guardar Cola A</button>
+                    </div>
+
+                    <!-- Paso 3: Llenado de Cola B -->
+                    <div id="ej1-paso3" class="hidden space-y-2 border-t border-slate-700 pt-3">
+                        <label class="block text-xs text-slate-300 font-medium">3. Ingrese elementos para <span class="text-emerald-400 font-bold">Cola B</span>:</label>
+                        <div id="ej1-inputsB" class="space-y-1.5 max-h-48 overflow-y-auto pr-1"></div>
+                        <button onclick="ej1_procesarYCalcular()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white text-xs py-2 rounded font-medium mt-2">Calcular y Generar Tabla</button>
+                    </div>
+
+                    <button onclick="ej1_reiniciar()" class="w-full bg-slate-700 hover:bg-slate-600 text-slate-300 text-xs py-1.5 rounded transition">
+                        Reiniciar Formulario
+                    </button>
+                </div>
+
+                <!-- Panel de Tabla de Resultados y Visualización de Objetos -->
+                <div class="lg:col-span-2 bg-slate-800 border border-slate-700 rounded-lg p-5 shadow-lg space-y-4 flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-sm font-semibold text-slate-300 uppercase tracking-wider mb-4 flex items-center">
+                            <i class="fa-solid fa-table mr-2 text-blue-400"></i> Tabla de Salida Tabular
+                        </h3>
+
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-sm border-collapse">
+                                <thead>
+                                    <tr class="bg-slate-900 border-b border-slate-700 text-slate-300">
+                                        <th class="p-3 font-semibold w-1/3">Cola A</th>
+                                        <th class="p-3 font-semibold w-1/3">Cola B</th>
+                                        <th class="p-3 font-semibold text-emerald-400 w-1/3">Cola Resultado</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="ej1-tablaCuerpo" class="divide-y divide-slate-700 font-mono">
+                                    <tr>
+                                        <td colspan="3" class="p-4 text-center text-slate-500 italic">Complete la captura de datos a la izquierda para visualizar los resultados.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Inspección de Objeto Cola Final -->
+                    <div class="bg-slate-950 border border-slate-800 rounded p-4 font-mono text-xs space-y-1">
+                        <span class="text-slate-500 block font-sans text-[11px] uppercase tracking-wider mb-1">Estado Interno del Objeto Cola Resultado:</span>
+                        <div id="ej1-estadoResultado" class="text-emerald-400 font-bold">[ ... ]</div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+
+        <!-- ================================================================= -->
+        <!-- VISTA 2: EJERCICIO 2 - SISTEMA DE SEGUROS -->
+        <!-- ================================================================= -->
+        <section id="vista-ejercicio2" class="hidden space-y-6">
+            
+            <div class="flex justify-between items-center border-b border-slate-800 pb-4">
+                <div>
+                    <h2 class="text-2xl font-bold text-white">Ejercicio 2: Sistema de Gestión de Colas de Servicios</h2>
+                    <p class="text-xs text-slate-400">Compañía de Seguros Vanguardia S.A.</p>
+                </div>
+                <button onclick="irAlMenu()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs py-2 px-3 rounded border border-slate-700">
+                    <i class="fa-solid fa-arrow-left mr-1"></i> Regresar al Menú Principal
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+                <!-- Columna Izquierda: Consola e Entradas -->
+                <div class="lg:col-span-1 space-y-6">
+                    <div class="bg-slate-800 border border-slate-700 rounded-lg p-5 shadow-lg">
+                        <h3 class="text-sm font-semibold text-blue-400 uppercase tracking-wider mb-3 flex items-center">
+                            <i class="fa-solid fa-terminal mr-2"></i> Consola de Comandos
+                        </h3>
+                        <p class="text-xs text-slate-400 mb-4">
+                            Sintaxis permitida:<br>
+                            - <code class="bg-slate-900 px-1 py-0.5 rounded text-emerald-400 font-mono">C&lt;servicio&gt;</code> (Cliente. Ej: <b>C1</b>)<br>
+                            - <code class="bg-slate-900 px-1 py-0.5 rounded text-yellow-400 font-mono">A&lt;servicio&gt;</code> (Atender. Ej: <b>A1</b>)
+                        </p>
+
+                        <form id="consoleForm" class="space-y-3" onsubmit="ej2_procesarComando(event)">
+                            <div>
+                                <label for="commandInput" class="block text-xs font-medium text-slate-300 mb-1">Entrada de Consola</label>
+                                <div class="flex">
+                                    <input type="text" id="commandInput" placeholder="Ej. C1 o A2" 
+                                        class="flex-1 bg-slate-900 border border-slate-700 rounded-l-md px-3 py-2 text-sm font-mono text-white focus:outline-none focus:border-blue-500 uppercase"
+                                        autocomplete="off">
+                                    <button type="submit" class="bg-blue-600 hover:bg-blue-500 text-white font-medium px-4 py-2 rounded-r-md text-sm transition-colors">
+                                        Ejecutar
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+
+                        <div id="consoleLog" class="mt-4 bg-slate-950 border border-slate-800 rounded p-3 text-xs font-mono h-28 overflow-y-auto space-y-1 text-slate-300">
+                            <div class="text-slate-500">> Consola inicializada. Esperando comandos...</div>
+                        </div>
+                    </div>
+
+                    <!-- Panel de Accesos Rápidos -->
+                    <div class="bg-slate-800 border border-slate-700 rounded-lg p-5 shadow-lg space-y-4">
+                        <h4 class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Accesos Rápidos</h4>
+                        
+                        <div class="space-y-2">
+                            <span class="text-xs text-slate-300 font-medium block">Servicio 1: Reclamaciones</span>
+                            <div class="grid grid-cols-2 gap-2">
+                                <button onclick="ej2_ejecutarAccion('C1')" class="bg-emerald-700 hover:bg-emerald-600 text-white text-xs py-1.5 px-3 rounded transition">+ Cliente (C1)</button>
+                                <button onclick="ej2_ejecutarAccion('A1')" class="bg-amber-700 hover:bg-amber-600 text-white text-xs py-1.5 px-3 rounded transition">Atender (A1)</button>
+                            </div>
+                        </div>
+
+                        <div class="space-y-2">
+                            <span class="text-xs text-slate-300 font-medium block">Servicio 2: Pólizas y Ventas</span>
+                            <div class="grid grid-cols-2 gap-2">
+                                <button onclick="ej2_ejecutarAccion('C2')" class="bg-emerald-700 hover:bg-emerald-600 text-white text-xs py-1.5 px-3 rounded transition">+ Cliente (C2)</button>
+                                <button onclick="ej2_ejecutarAccion('A2')" class="bg-amber-700 hover:bg-amber-600 text-white text-xs py-1.5 px-3 rounded transition">Atender (A2)</button>
+                            </div>
+                        </div>
+
+                        <div class="space-y-2">
+                            <span class="text-xs text-slate-300 font-medium block">Servicio 3: Pagos y Caja</span>
+                            <div class="grid grid-cols-2 gap-2">
+                                <button onclick="ej2_ejecutarAccion('C3')" class="bg-emerald-700 hover:bg-emerald-600 text-white text-xs py-1.5 px-3 rounded transition">+ Cliente (C3)</button>
+                                <button onclick="ej2_ejecutarAccion('A3')" class="bg-amber-700 hover:bg-amber-600 text-white text-xs py-1.5 px-3 rounded transition">Atender (A3)</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Columna Derecha: Pantalla TV y Colas -->
+                <div class="lg:col-span-2 space-y-6">
+                    <div class="bg-gradient-to-r from-blue-950 to-slate-800 border-2 border-blue-600 rounded-lg p-6 shadow-2xl text-center relative overflow-hidden">
+                        <div class="absolute top-2 left-3 text-[10px] uppercase font-bold tracking-widest text-blue-400">
+                            <i class="fa-solid fa-tv mr-1"></i> Pantalla de Atención al Público
+                        </div>
+                        <p class="text-sm uppercase tracking-widest text-slate-300 mt-2">Llamando a Ventanilla</p>
+                        <div id="displayLlamado" class="text-6xl font-extrabold text-amber-400 my-4 font-mono tracking-wider animate-pulse">
+                            ---
+                        </div>
+                        <div id="displayServicio" class="text-sm font-semibold text-blue-300">
+                            Esperando llamadas de personal...
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <!-- Servicio 1 -->
+                        <div class="bg-slate-800 border border-slate-700 rounded-lg p-4 shadow">
+                            <div class="flex justify-between items-center border-b border-slate-700 pb-2 mb-3">
+                                <h4 class="font-bold text-sm text-slate-200">Servicio 1</h4>
+                                <span class="bg-blue-900 text-blue-200 text-[10px] px-2 py-0.5 rounded font-bold">Reclamaciones</span>
+                            </div>
+                            <p class="text-xs text-slate-400 mb-2">En espera: <span id="count-1" class="font-bold text-white">0</span></p>
+                            <div id="queue-1" class="bg-slate-900 border border-slate-950 rounded p-2 min-h-[120px] max-h-[160px] overflow-y-auto space-y-1.5 font-mono text-xs">
+                                <span class="text-slate-600 block text-center mt-8 italic">Cola vacía</span>
+                            </div>
+                        </div>
+
+                        <!-- Servicio 2 -->
+                        <div class="bg-slate-800 border border-slate-700 rounded-lg p-4 shadow">
+                            <div class="flex justify-between items-center border-b border-slate-700 pb-2 mb-3">
+                                <h4 class="font-bold text-sm text-slate-200">Servicio 2</h4>
+                                <span class="bg-purple-900 text-purple-200 text-[10px] px-2 py-0.5 rounded font-bold">Pólizas</span>
+                            </div>
+                            <p class="text-xs text-slate-400 mb-2">En espera: <span id="count-2" class="font-bold text-white">0</span></p>
+                            <div id="queue-2" class="bg-slate-900 border border-slate-950 rounded p-2 min-h-[120px] max-h-[160px] overflow-y-auto space-y-1.5 font-mono text-xs">
+                                <span class="text-slate-600 block text-center mt-8 italic">Cola vacía</span>
+                            </div>
+                        </div>
+
+                        <!-- Servicio 3 -->
+                        <div class="bg-slate-800 border border-slate-700 rounded-lg p-4 shadow">
+                            <div class="flex justify-between items-center border-b border-slate-700 pb-2 mb-3">
+                                <h4 class="font-bold text-sm text-slate-200">Servicio 3</h4>
+                                <span class="bg-emerald-900 text-emerald-200 text-[10px] px-2 py-0.5 rounded font-bold">Pagos</span>
+                            </div>
+                            <p class="text-xs text-slate-400 mb-2">En espera: <span id="count-3" class="font-bold text-white">0</span></p>
+                            <div id="queue-3" class="bg-slate-900 border border-slate-950 rounded p-2 min-h-[120px] max-h-[160px] overflow-y-auto space-y-1.5 font-mono text-xs">
+                                <span class="text-slate-600 block text-center mt-8 italic">Cola vacía</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- SCRIPTS CON LA CLASE COLA Y LÓGICA DE NAVEGACIÓN/NEGOCIO -->
+    <script>
+        // =======================================================
+        // ESTRUCTURA DE DATOS UNIFICADA: CLASE COLA (FIFO)
+        // =======================================================
+        class Cola {
+            constructor() {
+                this.items = [];
+            }
+
+            encolar(item) {
+                this.items.push(item);
+            }
+
+            desencolar() {
+                if (this.estaVacia()) {
+                    return null;
+                }
+                return this.items.shift();
+            }
+
+            estaVacia() {
+                return this.items.length === 0;
+            }
+
+            longitud() {
+                return this.items.length;
+            }
+
+            obtenerElementos() {
+                return [...this.items];
+            }
+
+            toString() {
+                return JSON.stringify(this.items);
+            }
+        }
+
+        // =======================================================
+        // GESTIÓN DE VISTAS Y NAVEGACIÓN
+        // =======================================================
+        function irAlMenu() {
+            document.getElementById('vista-menu').classList.remove('hidden');
+            document.getElementById('vista-ejercicio1').classList.add('hidden');
+            document.getElementById('vista-ejercicio2').classList.add('hidden');
+        }
+
+        function abrirEjercicio(num) {
+            document.getElementById('vista-menu').classList.add('hidden');
+            if (num === 1) {
+                document.getElementById('vista-ejercicio1').classList.remove('hidden');
+                document.getElementById('vista-ejercicio2').classList.add('hidden');
+            } else if (num === 2) {
+                document.getElementById('vista-ejercicio1').classList.add('hidden');
+                document.getElementById('vista-ejercicio2').classList.remove('hidden');
+            }
+        }
+
+
+        // =======================================================
+        // LÓGICA DEL EJERCICIO 1: SUMA DE COLAS
+        // =======================================================
+        let ej1_cantidad = 0;
+        let ej1_colaA = new Cola();
+        let ej1_colaB = new Cola();
+
+        function ej1_fijarFilas() {
+            const inputFilas = document.getElementById('ej1-numFilas');
+            const n = parseInt(inputFilas.value);
+            if (isNaN(n) || n <= 0) {
+                alert("Ingrese un número entero válido mayor a 0.");
+                return;
+            }
+            ej1_cantidad = n;
+
+            // Generar campos para Cola A
+            const containerA = document.getElementById('ej1-inputsA');
+            containerA.innerHTML = '';
+            for (let i = 1; i <= n; i++) {
+                containerA.innerHTML += `
+                    <div class="flex items-center space-x-2">
+                        <span class="text-[11px] text-slate-400 w-20">Elem A${i}:</span>
+                        <input type="number" id="inputA-${i}" value="${i * 2}" class="bg-slate-900 border border-slate-700 rounded px-2 py-1 text-xs font-mono text-white w-full">
+                    </div>
+                `;
+            }
+
+            document.getElementById('ej1-paso1').classList.add('opacity-50', 'pointer-events-none');
+            document.getElementById('ej1-paso2').classList.remove('hidden');
+        }
+
+        function ej1_guardarColaA() {
+            ej1_colaA = new Cola();
+            for (let i = 1; i <= ej1_cantidad; i++) {
+                const val = parseInt(document.getElementById(`inputA-${i}`).value) || 0;
+                ej1_colaA.encolar(val);
+            }
+
+            // Generar campos para Cola B
+            const containerB = document.getElementById('ej1-inputsB');
+            containerB.innerHTML = '';
+            for (let i = 1; i <= ej1_cantidad; i++) {
+                containerB.innerHTML += `
+                    <div class="flex items-center space-x-2">
+                        <span class="text-[11px] text-slate-400 w-20">Elem B${i}:</span>
+                        <input type="number" id="inputB-${i}" value="${i * 3}" class="bg-slate-900 border border-slate-700 rounded px-2 py-1 text-xs font-mono text-white w-full">
+                    </div>
+                `;
+            }
+
+            document.getElementById('ej1-paso2').classList.add('opacity-50', 'pointer-events-none');
+            document.getElementById('ej1-paso3').classList.remove('hidden');
+        }
+
+        function ej1_procesarYCalcular() {
+            ej1_colaB = new Cola();
+            for (let i = 1; i <= ej1_cantidad; i++) {
+                const val = parseInt(document.getElementById(`inputB-${i}`).value) || 0;
+                ej1_colaB.encolar(val);
+            }
+
+            // Copias auxiliares de lectura para visualización
+            const listaA = ej1_colaA.obtenerElementos();
+            const listaB = ej1_colaB.obtenerElementos();
+
+            // Cola Resultado por desencolado FIFO
+            const colaResultado = new Cola();
+            const listaResultado = [];
+
+            while (!ej1_colaA.estaVacia() && !ej1_colaB.estaVacia()) {
+                const elemA = ej1_colaA.desencolar();
+                const elemB = ej1_colaB.desencolar();
+                const suma = elemA + elemB;
+                colaResultado.encolar(suma);
+                listaResultado.push(suma);
+            }
+
+            // Renderizar la tabla de salida
+            const tbody = document.getElementById('ej1-tablaCuerpo');
+            tbody.innerHTML = '';
+            for (let i = 0; i < ej1_cantidad; i++) {
+                tbody.innerHTML += `
+                    <tr class="hover:bg-slate-750 transition">
+                        <td class="p-3 text-slate-200">${listaA[i]}</td>
+                        <td class="p-3 text-slate-200">${listaB[i]}</td>
+                        <td class="p-3 text-emerald-400 font-bold">${listaResultado[i]}</td>
+                    </tr>
+                `;
+            }
+
+            document.getElementById('ej1-estadoResultado').innerText = colaResultado.toString();
+        }
+
+        function ej1_reiniciar() {
+            ej1_cantidad = 0;
+            ej1_colaA = new Cola();
+            ej1_colaB = new Cola();
+            
+            document.getElementById('ej1-numFilas').value = '';
+            document.getElementById('ej1-paso1').classList.remove('opacity-50', 'pointer-events-none');
+            document.getElementById('ej1-paso2').classList.add('hidden');
+            document.getElementById('ej1-paso2').classList.remove('opacity-50', 'pointer-events-none');
+            document.getElementById('ej1-paso3').classList.add('hidden');
+            
+            document.getElementById('ej1-tablaCuerpo').innerHTML = `
+                <tr>
+                    <td colspan="3" class="p-4 text-center text-slate-500 italic">Complete la captura de datos a la izquierda para visualizar los resultados.</td>
+                </tr>
+            `;
+            document.getElementById('ej1-estadoResultado').innerText = '[ ... ]';
+        }
+
+
+        // =======================================================
+        // LÓGICA DEL EJERCICIO 2: SEGUROS VANGUARDIA
+        // =======================================================
+        const ej2_colas = {
+            1: new Cola(),
+            2: new Cola(),
+            3: new Cola()
+        };
+
+        const ej2_contadores = {
+            1: 100,
+            2: 200,
+            3: 300
+        };
+
+        const ej2_nombresServicios = {
+            1: "Reclamaciones y Siniestros",
+            2: "Contratación y Pólizas",
+            3: "Caja y Pagos"
+        };
+
+        function ej2_procesarComando(e) {
+            e.preventDefault();
+            const input = document.getElementById('commandInput');
+            const comando = input.value.trim().toUpperCase();
+            input.value = '';
+
+            if (!comando) return;
+            ej2_ejecutarAccion(comando);
+        }
+
+        function ej2_ejecutarAccion(comando) {
+            const tipo = comando.charAt(0);
+            const servicioNum = parseInt(comando.substring(1));
+
+            if (![1, 2, 3].includes(servicioNum)) {
+                ej2_logConsola(`Error: Servicio '${comando.substring(1)}' no válido. Use 1, 2 o 3.`, 'text-red-400');
+                return;
+            }
+
+            if (tipo === 'C') {
+                ej2_contadores[servicioNum]++;
+                const numeroTicket = `S${servicioNum}-${ej2_contadores[servicioNum]}`;
+                ej2_colas[servicioNum].encolar(numeroTicket);
+                
+                ej2_logConsola(`[LLEGADA] Cliente encolado en Servicio ${servicioNum}. Ticket asignado: ${numeroTicket}`, 'text-emerald-400');
+                ej2_actualizarVista();
+
+            } else if (tipo === 'A') {
+                if (ej2_colas[servicioNum].estaVacia()) {
+                    ej2_logConsola(`[AVISO] No hay clientes en espera para el Servicio ${servicioNum}.`, 'text-yellow-400');
+                    return;
+                }
+
+                const ticketLlamado = ej2_colas[servicioNum].desencolar();
+                
+                document.getElementById('displayLlamado').innerText = ticketLlamado;
+                document.getElementById('displayServicio').innerText = `Por favor, pase al área de ${ej2_nombresServicios[servicioNum]}`;
+
+                ej2_logConsola(`[ATENCIÓN] Llamando ticket ${ticketLlamado} en Servicio ${servicioNum}`, 'text-amber-400');
+                ej2_actualizarVista();
+
+            } else {
+                ej2_logConsola(`Error: Comando '${comando}' no reconocido. Use 'C' o 'A'.`, 'text-red-400');
+            }
+        }
+
+        function ej2_actualizarVista() {
+            for (let i = 1; i <= 3; i++) {
+                const queueContainer = document.getElementById(`queue-${i}`);
+                const countSpan = document.getElementById(`count-${i}`);
+                const elementos = ej2_colas[i].obtenerElementos();
+
+                countSpan.innerText = elementos.length;
+
+                if (elementos.length === 0) {
+                    queueContainer.innerHTML = '<span class="text-slate-600 block text-center mt-8 italic">Cola vacía</span>';
+                } else {
+                    queueContainer.innerHTML = elementos.map((ticket, index) => `
+                        <div class="flex justify-between items-center bg-slate-800 border border-slate-700 px-2 py-1 rounded text-slate-200">
+                            <span>${ticket}</span>
+                            <span class="text-[10px] text-slate-500">Pos #${index + 1}</span>
+                        </div>
+                    `).join('');
+                }
+            }
+        }
+
+        function ej2_logConsola(mensaje, colorClass = 'text-slate-300') {
+            const consoleLog = document.getElementById('consoleLog');
+            const entrada = document.createElement('div');
+            entrada.className = colorClass;
+            entrada.innerText = `> ${mensaje}`;
+            consoleLog.appendChild(entrada);
+            consoleLog.scrollTop = consoleLog.scrollHeight;
+        }
+    </script>
+</body>
+</html>
